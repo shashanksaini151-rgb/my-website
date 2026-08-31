@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PartnerConnect</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f7fb;color:#222}
+header{background:#111827;color:white;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:23px;font-weight:bold}
+nav a{color:white;text-decoration:none;margin-left:15px;font-size:14px}
+
+.hero{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;text-align:center;padding:55px 20px}
+.hero h1{font-size:34px;margin-bottom:12px}
+.hero p{font-size:16px;margin-bottom:25px}
+.btn{display:inline-block;background:white;color:#4f46e5;padding:13px 24px;border-radius:8px;text-decoration:none;font-weight:bold}
+
+.search{background:white;margin:-25px 20px 30px;padding:20px;border-radius:12px;box-shadow:0 5px 20px #0002}
+.search input,.search select{width:100%;padding:13px;margin-bottom:12px;border:1px solid #ddd;border-radius:7px}
+
+section{padding:25px 20px}
+h2{text-align:center;margin-bottom:20px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:white;border-radius:12px;padding:20px;box-shadow:0 3px 15px #0001}
+.avatar{width:70px;height:70px;border-radius:50%;background:#e0e7ff;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:12px}
+.card h3{margin-bottom:7px}
+.card p{color:#666;margin-bottom:12px}
+.card button{border:0;background:#4f46e5;color:white;padding:10px 16px;border-radius:7px}
+
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.plan{background:white;padding:25px;border-radius:12px;text-align:center;box-shadow:0 3px 15px #0001}
+.price{font-size:30px;font-weight:bold;color:#4f46e5;margin:12px}
+.plan button{background:#4f46e5;color:white;border:0;padding:11px 20px;border-radius:7px}
+
+footer{background:#111827;color:white;text-align:center;padding:25px;margin-top:30px}
+footer a{color:white;margin:0 8px;font-size:13px}
+
+@media(max-width:600px){
+nav{display:none}
+.hero h1{font-size:29px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">PartnerConnect</div>
+<nav>
+<a href="#">Home</a>
+<a href="#partners">Partners</a>
+<a href="#plans">Membership</a>
+</nav>
+</header>
+
+<div class="hero">
+<h1>Find Your Perfect Partner</h1>
+<p>Connect with people, explore profiles and build meaningful connections.</p>
+<a class="btn" href="#partners">Explore Partners</a>
+</div>
+
+<div class="search">
+<input type="text" placeholder="Search by name or city...">
+<select>
+<option>Select Category</option>
+<option>Friendship</option>
+<option>Social</option>
+<option>Companion</option>
+<option>Professional</option>
+</select>
+<button class="card button" style="width:100%;background:#4f46e5;color:white;padding:13px;border:0;border-radius:7px">
+Search
+</button>
+</div>
+
+<section id="partners">
+<h2>Featured Partners</h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="avatar">👤</div>
+<h3>Partner Profile</h3>
+<p>📍 Delhi</p>
+<p>⭐ 4.8 Rating</p>
+<button>View Profile</button>
+</div>
+
+<div class="card">
+<div class="avatar">👤</div>
+<h3>Partner Profile</h3>
+<p>📍 Mumbai</p>
+<p>⭐ 4.7 Rating</p>
+<button>View Profile</button>
+</div>
+
+<div class="card">
+<div class="avatar">👤</div>
+<h3>Partner Profile</h3>
+<p>📍 Jaipur</p>
+<p>⭐ 4.9 Rating</p>
+<button>View Profile</button>
+</div>
+
+</div>
+</section>
+
+<section id="plans">
+<h2>Membership Plans</h2>
+
+<div class="plans">
+
+<div class="plan">
+<h3>6 Months</h3>
+<div class="price">₹345</div>
+<p>6 months access</p>
+<br>
+<button>Choose Plan</button>
+</div>
+
+<div class="plan">
+<h3>1 Year</h3>
+<div class="price">₹859</div>
+<p>1 year access</p>
+<br>
+<button>Choose Plan</button>
+</div>
+
+<div class="plan">
+<h3>Lifetime</h3>
+<div class="price">₹1,999</div>
+<p>Lifetime access</p>
+<br>
+<button>Choose Plan</button>
+</div>
+
+</div>
+</section>
+
+<footer>
+<p>© 2026 PartnerConnect</p>
+<br>
+<a href="#">Terms</a>
+<a href="#">Privacy</a>
+<a href="#">Safety</a>
+</footer>
+
+</body>
+</html>
