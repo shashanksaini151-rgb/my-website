@@ -46,7 +46,26 @@ nav{display:none}
 }
 </style>
 </head>
+<script>
+function searchPartners() {
+  const search = document.querySelector('.search input').value.toLowerCase();
+  const cards = document.querySelectorAll('.card');
 
+  cards.forEach(card => {
+    if (!card.querySelector('h3')) return;
+
+    const text = card.innerText.toLowerCase();
+
+    if (search === '' || text.includes(search)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+document.querySelector('.search button').onclick = searchPartners;
+</script>
 <body>
   
 <header>
