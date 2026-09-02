@@ -9,7 +9,8 @@
 
 <meta name="description" content="PartnerConnect helps you discover and connect with people by city and interests. Explore profiles and build meaningful connections.">
 <meta name="robots" content="index, follow">
-<meta name="keywords" content="PartnerConnect, find a partner, compatible partner, partner connection">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{
@@ -43,6 +44,31 @@ nav a{
   text-decoration:none;
   margin-left:15px;
   font-size:14px;
+}
+
+.auth-area{
+  margin-top:10px;
+  text-align:center;
+}
+
+.auth-btn{
+  background:#4f46e5;
+  color:white;
+  border:0;
+  padding:10px 16px;
+  border-radius:7px;
+  margin:4px;
+  cursor:pointer;
+}
+
+.logout-btn{
+  background:#dc2626;
+}
+
+.user-email{
+  font-size:13px;
+  margin:5px;
+  color:#ddd;
 }
 
 .hero{
@@ -193,6 +219,56 @@ footer a{
   font-size:13px;
 }
 
+.auth-modal{
+  display:none;
+  position:fixed;
+  z-index:999;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:#0008;
+  padding:20px;
+}
+
+.auth-box{
+  background:white;
+  max-width:400px;
+  margin:80px auto;
+  padding:25px;
+  border-radius:12px;
+}
+
+.auth-box input{
+  width:100%;
+  padding:13px;
+  margin:8px 0;
+  border:1px solid #ddd;
+  border-radius:7px;
+}
+
+.auth-box button{
+  width:100%;
+  padding:13px;
+  margin-top:8px;
+  background:#4f46e5;
+  color:white;
+  border:0;
+  border-radius:7px;
+}
+
+.close-btn{
+  float:right;
+  font-size:24px;
+  cursor:pointer;
+}
+
+#authMessage{
+  margin-top:10px;
+  text-align:center;
+  font-size:14px;
+}
+
 @media(max-width:600px){
   nav{
     display:none;
@@ -216,6 +292,18 @@ footer a{
     <a href="#plans">Membership</a>
   </nav>
 </header>
+
+<div class="auth-area">
+  <div id="loggedOut">
+    <button class="auth-btn" onclick="openAuth('login')">Login</button>
+    <button class="auth-btn" onclick="openAuth('signup')">Sign Up</button>
+  </div>
+
+  <div id="loggedIn" style="display:none;">
+    <div class="user-email" id="userEmail"></div>
+    <button class="auth-btn logout-btn" onclick="logout()">Logout</button>
+  </div>
+</div>
 
 <div class="hero">
 
@@ -293,57 +381,33 @@ footer a{
 </section>
 
 <section id="profile1">
-
   <div class="card">
-
     <h2>Partner Profile</h2>
-
     <p><strong>📍 City:</strong> Delhi</p>
     <p><strong>🤝 Category:</strong> Friendship</p>
     <p><strong>⭐ Rating:</strong> 4.8</p>
-
-    <p>
-      Connect with this profile through PartnerConnect.
-    </p>
-
+    <p>Connect with this profile through PartnerConnect.</p>
   </div>
-
 </section>
 
 <section id="profile2">
-
   <div class="card">
-
     <h2>Partner Profile</h2>
-
     <p><strong>📍 City:</strong> Mumbai</p>
     <p><strong>🤝 Category:</strong> Social</p>
     <p><strong>⭐ Rating:</strong> 4.7</p>
-
-    <p>
-      Connect with this profile through PartnerConnect.
-    </p>
-
+    <p>Connect with this profile through PartnerConnect.</p>
   </div>
-
 </section>
 
 <section id="profile3">
-
   <div class="card">
-
     <h2>Partner Profile</h2>
-
     <p><strong>📍 City:</strong> Jaipur</p>
     <p><strong>🤝 Category:</strong> Companion</p>
     <p><strong>⭐ Rating:</strong> 4.9</p>
-
-    <p>
-      Connect with this profile through PartnerConnect.
-    </p>
-
+    <p>Connect with this profile through PartnerConnect.</p>
   </div>
-
 </section>
 
 <section id="register">
@@ -357,29 +421,15 @@ footer a{
       method="POST"
     >
 
-      <input
-        type="hidden"
-        name="_subject"
-        value="New PartnerConnect Profile Registration"
-      >
+      <input type="hidden" name="_subject"
+      value="New PartnerConnect Profile Registration">
 
-      <input
-        type="hidden"
-        name="_captcha"
-        value="false"
-      >
-<input
-  type="hidden"
-  name="_template"
-  value="table"
->
+      <input type="hidden" name="_captcha" value="false">
 
-<input
-  type="hidden"
-  name="_next"
-  value="https://shashanksaini151-rgb.github.io/my-website/success.html"
->
-      
+      <input type="hidden" name="_template" value="table">
+
+      <input type="hidden" name="_next"
+      value="https://shashanksaini151-rgb.github.io/my-website/success.html">
 
       <input
         type="text"
@@ -402,13 +452,11 @@ footer a{
         required
         style="width:100%;padding:13px;margin-bottom:12px;border:1px solid #ddd;border-radius:7px;"
       >
-
         <option value="">Select Category</option>
         <option value="Friendship">Friendship</option>
         <option value="Social">Social</option>
         <option value="Companion">Companion</option>
         <option value="Professional">Professional</option>
-
       </select>
 
       <textarea
@@ -477,7 +525,293 @@ footer a{
 
 </footer>
 
+<!-- LOGIN / SIGNUP MODAL -->
+
+<div class="auth-modal" id="authModal">
+
+  <div class="auth-box">
+
+    <span class="close-btn" onclick="closeAuth()">×</span>
+
+    <h2 id="authTitle">Login</h2>
+
+    <input
+      type="email"
+      id="authEmail"
+      placeholder="Email address"
+    >
+
+    <input
+      type="password"
+      id="authPassword"
+      placeholder="Password"
+    >
+
+    <button onclick="handleAuth()" id="authButton">
+      Login
+    </button>
+
+    <p id="authMessage"></p>
+
+    <p style="text-align:center;margin-top:15px;font-size:14px;">
+      <span id="switchText">Don't have an account?</span>
+      <a href="#" onclick="switchAuth();return false;" id="switchLink">
+        Sign Up
+      </a>
+    </p>
+
+  </div>
+
+</div>
+
 <script>
+
+/* ==============================
+   SUPABASE CONNECTION
+================================ */
+
+const SUPABASE_KEY =
+  "sb_publishable_gpMN8lRI0-MDtNF1Wk7-Bg_HDVnfTdn";
+
+const SUPABASE_KEY =
+  "YOUR_PUBLISHABLE_KEY";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* ==============================
+   AUTH MODAL
+================================ */
+
+let authMode = "login";
+
+function openAuth(mode){
+
+  authMode = mode;
+
+  document.getElementById("authModal").style.display = "block";
+
+  updateAuthUI();
+
+}
+
+function closeAuth(){
+
+  document.getElementById("authModal").style.display = "none";
+
+  document.getElementById("authMessage").innerText = "";
+
+}
+
+function switchAuth(){
+
+  if(authMode === "login"){
+    authMode = "signup";
+  }else{
+    authMode = "login";
+  }
+
+  updateAuthUI();
+
+}
+
+function updateAuthUI(){
+
+  if(authMode === "login"){
+
+    document.getElementById("authTitle").innerText = "Login";
+
+    document.getElementById("authButton").innerText = "Login";
+
+    document.getElementById("switchText").innerText =
+      "Don't have an account?";
+
+    document.getElementById("switchLink").innerText =
+      "Sign Up";
+
+  }else{
+
+    document.getElementById("authTitle").innerText =
+      "Create Account";
+
+    document.getElementById("authButton").innerText =
+      "Sign Up";
+
+    document.getElementById("switchText").innerText =
+      "Already have an account?";
+
+    document.getElementById("switchLink").innerText =
+      "Login";
+
+  }
+
+}
+
+
+/* ==============================
+   SIGNUP / LOGIN
+================================ */
+
+async function handleAuth(){
+
+  const email =
+    document.getElementById("authEmail").value.trim();
+
+  const password =
+    document.getElementById("authPassword").value;
+
+  const message =
+    document.getElementById("authMessage");
+
+  if(!email || !password){
+
+    message.innerText =
+      "Please enter email and password.";
+
+    return;
+
+  }
+
+  message.innerText = "Please wait...";
+
+  if(authMode === "signup"){
+
+    const { data, error } =
+      await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+      });
+
+    if(error){
+
+      message.innerText = error.message;
+
+      return;
+
+    }
+
+    message.innerText =
+      "Account created! Please check your email to confirm your account.";
+
+  }else{
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+    if(error){
+
+      message.innerText = error.message;
+
+      return;
+
+    }
+
+    message.innerText = "Login successful!";
+
+    setTimeout(function(){
+      closeAuth();
+    },1000);
+
+  }
+
+}
+
+
+/* ==============================
+   LOGOUT
+================================ */
+
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  updateUserUI(null);
+
+}
+
+
+/* ==============================
+   USER UI
+================================ */
+
+function updateUserUI(user){
+
+  const loggedOut =
+    document.getElementById("loggedOut");
+
+  const loggedIn =
+    document.getElementById("loggedIn");
+
+  const userEmail =
+    document.getElementById("userEmail");
+
+  if(user){
+
+    loggedOut.style.display = "none";
+
+    loggedIn.style.display = "block";
+
+    userEmail.innerText =
+      "Logged in: " + user.email;
+
+  }else{
+
+    loggedOut.style.display = "block";
+
+    loggedIn.style.display = "none";
+
+    userEmail.innerText = "";
+
+  }
+
+}
+
+
+/* ==============================
+   CHECK LOGIN
+================================ */
+
+async function checkUser(){
+
+  const { data } =
+    await supabaseClient.auth.getSession();
+
+  updateUserUI(
+    data.session
+      ? data.session.user
+      : null
+  );
+
+}
+
+
+/* ==============================
+   AUTH STATE LISTENER
+================================ */
+
+supabaseClient.auth.onAuthStateChange(
+  function(event, session){
+
+    updateUserUI(
+      session
+        ? session.user
+        : null
+    );
+
+  }
+);
+
+
+/* ==============================
+   SEARCH
+================================ */
 
 function searchPartners(){
 
@@ -515,6 +849,11 @@ function searchPartners(){
   });
 
 }
+
+
+/* START */
+
+checkUser();
 
 </script>
 
